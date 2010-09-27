@@ -5,9 +5,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Vector;
+import java.util.Set;
 
 /**
  * Mange the event, containing the information about how many event in total
@@ -18,11 +18,11 @@ import java.util.Vector;
 public class EventManager {
 	private List<Event> eventSequence;	//	event sequence
 	
-	private List<Event> eventSet;
+	private Set<Event> eventSet;
 	
 	public EventManager(){
 		eventSequence = new ArrayList<Event>();
-		eventSet = new ArrayList<Event>();
+		eventSet = new HashSet<Event>();
 	}
 	
 	public void read(String filepath) throws IOException {
@@ -46,17 +46,7 @@ public class EventManager {
 	
 	public void addEvent(Event event){
 		eventSequence.add(event);
-		boolean found = false;
-		for(int i = 0; i < eventSet.size(); ++i){
-			Event e = eventSet.get(i);
-			if(e.equals(event)){
-				e.increaseCount();
-				found = true;
-			}
-		}
-		if(found == false){
-			eventSet.add(event);
-		}
+		eventSet.add(event);
 	}
 	
 	public int distinctEventSize(){
@@ -71,7 +61,7 @@ public class EventManager {
 		return eventSequence;
 	}
 	
-	public List<Event> getEventSet(){
+	public Set<Event> getEventSet(){
 		return eventSet;
 	}
 	
