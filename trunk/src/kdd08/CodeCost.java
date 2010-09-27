@@ -69,13 +69,14 @@ public class CodeCost {
 					System.out.println();
 				}
 			}
-			cost += costTLMatrix[start][j];
+			curcost += costTLMatrix[start][j];
 			if(costLLMatrix[j + 1][end] < 0.0){
 				double subcost = optimalLL(j + 1, end);
 				costLLMatrix[j + 1][end] = subcost;
 			}
-			cost += costLLMatrix[j + 1][end];
-			if(cost < 0.0 || curcost < cost){
+			curcost += costLLMatrix[j + 1][end];
+			
+			if(cost < 0.0 || (cost > 0.0 && curcost < cost)){
 				cost = curcost;
 			}
 		}
