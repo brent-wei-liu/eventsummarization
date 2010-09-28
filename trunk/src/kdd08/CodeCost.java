@@ -50,12 +50,8 @@ public class CodeCost {
 	}
 	
 	private double optimalTLHelper(int start, int end){
-		if(start == end){
-			return 0.0;
-		}
 		double cost = 0.0;
 		for(int j = start; j < end; ++j){
-			System.out.println("Event:" + start + ":" + end);
 			double curcost = 0.0;
 			if(costTLMatrix[start][j] < 0.0){
 				double subcost = optimalTLHelper(start, j);
@@ -85,9 +81,6 @@ public class CodeCost {
 	}
 	
 	private double optimalLL(int start, int end){
-		if(start == end){
-			return 0.0;
-		}
 		double cost = 0.0;
 		if(costLLMatrix[start][end]  < 0.0){
 			double subcost = optimalLLHelper(start, end);
@@ -98,9 +91,6 @@ public class CodeCost {
 	}
 	
 	private double optimalLLHelper(int start, int end){
-		if(start == end){
-			return 0.0;
-		}
 		System.out.println("LLMatrix:");
 		for(int idx = 0; idx < eventSequence.size(); ++idx){
 			for(int jdx = 0; jdx < eventSequence.size(); ++jdx){
@@ -120,6 +110,9 @@ public class CodeCost {
 			if(cost == 0.0 || curcost < cost){
 				cost = curcost;
 			}
+		}
+		if(cost == 0.0){
+			cost = m * Math.log(m) / Math.log(2);
 		}
 
 		return cost;
@@ -166,13 +159,13 @@ public class CodeCost {
 	
 	/**
 	 * Get the ordered list according to Ii
-	 * @param eventStart
+	 * @param start
 	 * @param end
 	 * @return
 	 */
-	private List<Event> getSubsetEventOrder(int eventStart, int eventEnd){
+	private List<Event> getSubsetEventOrder(int start, int end){
 		List<Event> orderList = new ArrayList<Event>();
-		for(int i = eventStart; i <= eventEnd; ++i){
+		for(int i = start; i <= end; ++i){
 			Event event = eventSequence.get(i);
 			boolean found = false;
 			for(int j = 0; j < orderList.size(); ++j){
