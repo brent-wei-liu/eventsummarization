@@ -25,9 +25,16 @@ public class EventManager {
 		eventSet = new HashSet<Event>();
 	}
 	
+	/**
+	 * Read the event sequence log from file.
+	 * @param filepath
+	 * @throws IOException
+	 */
 	public void read(String filepath) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(filepath));
 		String line;
+		//	 skip header
+		reader.readLine();
 		while((line = reader.readLine()) != null){
 			if(line.length() == 0){
 				continue;
