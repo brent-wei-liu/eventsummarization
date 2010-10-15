@@ -8,7 +8,7 @@ import java.util.Set;
 
 import basic.Event;
 import basic.EventManager;
-import basic.Pair;
+import basic.ComparablePair;
 
 /**
  * The MDL code cost for each part.
@@ -193,9 +193,9 @@ public class CodeCost {
 	public double greedyTL(){
 		//	init boundary
 		double cost = 0.0;
-		List<Pair<Integer, Double>> listBoundary = new ArrayList<Pair<Integer, Double>>();
+		List<ComparablePair<Integer, Double>> listBoundary = new ArrayList<ComparablePair<Integer, Double>>();
 		for(int i = 1; i < eventSequence.size(); ++i){
-			Pair<Integer, Double> pair = new Pair<Integer, Double>();
+			ComparablePair<Integer, Double> pair = new ComparablePair<Integer, Double>();
 			pair.setFirst(i);
 			double g = optimalLL(i - 1, i + 1 - 1) + Math.log(eventSequence.size()) / Math.log(2)
 						- optimalLL(i - 1, i - 1) - Math.log(eventSequence.size()) / Math.log(2)
