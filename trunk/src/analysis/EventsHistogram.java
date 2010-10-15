@@ -41,29 +41,44 @@ public class EventsHistogram {
 		eventSequence = null;
 		histogram = new HistogramDataset();
 		listHistogram = new ArrayList<Pair<Event, HistogramDataset>>();
+		
+		//	initialization
+		try{
+			eventManager.read(datasetFile);
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		eventSet = eventManager.getEventSet();
+		int distinctEventNumber = eventSet.size();
+		eventSequence = eventManager.getSequence();
 	}
 	
 	public HistogramDataset generateHistogramByEvent(Event event) throws IOException{
 		boolean firstAppear = true;
-		int previousLocation = 0;
+		long previousLocation = 0;
 		List<Double> intervalList = new ArrayList<Double>();
 		for(int i = 0; i < eventSequence.size(); ++i){
 			if(event.equals(eventSequence.get(i))){
 				if(firstAppear == true){
-					previousLocation = i;
+					previousLocation = event.getDate().getTimeInMillis();
+					System.out.println(previousLocation);
 					firstAppear = false;
 				}
 				else{
-					double interval = i - previousLocation;
+					System.out.println(event.getDate().getTimeInMillis() - previousLocation);
+					double interval = ((double)(event.getDate().getTimeInMillis() - previousLocation));
 					intervalList.add(interval);
+					System.out.println("" + interval);
 				}
 			}
+			
 		}
+		
 		HistogramDataset dataset = new HistogramDataset();
-		Double[] values = new Double[1];
+		Double[] values = new Double[intervalList.size()];
 		intervalList.toArray(values);
 		double[] dvalues = new double[values.length];
-		for(int i = 0; i < dvalues.length; ++i){
+		for(int i = 0; i < values.length; ++i){
 			dvalues[i] = values[i];
 		}
 		if(dvalues.length != 0){
@@ -74,11 +89,7 @@ public class EventsHistogram {
 	}
 	
 	public void generateHistograms() throws IOException{
-		//	initialization
-		eventManager.read(datasetFile);
-		eventSet = eventManager.getEventSet();
-		int distinctEventNumber = eventSet.size();
-		eventSequence = eventManager.getSequence();
+
 		//	first of pair denotes the interval, second of pair denotes the frequency
 		List<Map<Integer, Integer>> eventFrequency = new ArrayList();
 		
@@ -178,15 +189,15 @@ public class EventsHistogram {
 		Iterator<Event> itr = set.iterator();
 		System.out.println(set.size());
 		Event event = null;
-		for(int i = 0; i < 2; ++i){
+		for(int i = 0; i < 5; ++i){
 			event = itr.next();
 		}
 		HistogramDataset hh = histogram.generateHistogramByEvent(event);
 		
 		HistogramDataset h = new HistogramDataset();
-		h.addSeries("Event A", new double[]{2.00, 3.00, 4.00, 3.00}, 4);
+		h.addSeries("Event A", new double[]{2.00, 3.00, 4.00, 3.00,3.00,3.00,3.00,3.00,1.00,1.00,1.00}, 10);
 		
-		JFreeChart chart = ChartFactory.createHistogram("Histogram", "interval", "frequency", hh, PlotOrientation.VERTICAL, true, false, false);
+		JFreeChart chart = ChartFactory.createHistogram("Histogram", "interval", "frequency", hh, PlotOrientation.VERTICAL, true, true, false);
 		ChartFrame cf = new ChartFrame("Historgam", chart);
 		cf.pack();
 		cf.setSize(500, 300);
